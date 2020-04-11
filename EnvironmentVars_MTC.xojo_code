@@ -2,7 +2,7 @@
 Protected Class EnvironmentVars_MTC
 	#tag Method, Flags = &h1
 		Protected Shared Function BooleanValueFor(methodName As String) As Boolean
-		  var stringValue as string = ValueFor( methodName ).Trim
+		  dim stringValue as string = ValueFor( methodName ).Trim
 		  return ToBoolean( stringValue )
 		  
 		End Function
@@ -43,7 +43,7 @@ Protected Class EnvironmentVars_MTC
 		  // useHiddenValue when the property as the attribute "HideValue"
 		  //
 		  
-		  var isHidden as boolean
+		  dim isHidden as boolean
 		  
 		  for each prop as Introspection.PropertyInfo in GetVarProps
 		    if prop.Name = varName then
@@ -52,7 +52,7 @@ Protected Class EnvironmentVars_MTC
 		    end if
 		  next
 		  
-		  var value as string = System.EnvironmentVariable( varName ).Trim
+		  dim value as string = System.EnvironmentVariable( varName ).Trim
 		  
 		  if value = "" then
 		    value = useUnsetValue
@@ -67,10 +67,10 @@ Protected Class EnvironmentVars_MTC
 
 	#tag Method, Flags = &h0
 		Shared Function GetVarNames() As String()
-		  var names() as string
+		  dim names() as string
 		  
 		  for each prop as Introspection.PropertyInfo in GetVarProps
-		    names.AddRow prop.Name
+		    names.Append prop.Name
 		  next
 		  
 		  return names
@@ -81,7 +81,7 @@ Protected Class EnvironmentVars_MTC
 	#tag Method, Flags = &h1
 		Protected Shared Function GetVarProps() As Introspection.PropertyInfo()
 		  if not WasInited then
-		    var err as new RuntimeException
+		    dim err as new RuntimeException
 		    err.Message = "Init(subclassTypeInfo) was must called first"
 		    raise err
 		  end if
@@ -90,12 +90,12 @@ Protected Class EnvironmentVars_MTC
 		  
 		  static needsInit as boolean = true
 		  if needsInit then
-		    var ti as Introspection.TypeInfo = MySubclassTypeInfo
-		    var allProps() as Introspection.PropertyInfo = ti.GetProperties
+		    dim ti as Introspection.TypeInfo = MySubclassTypeInfo
+		    dim allProps() as Introspection.PropertyInfo = ti.GetProperties
 		    
 		    for each prop as Introspection.PropertyInfo in allProps
 		      if prop.IsComputed and prop.IsShared and prop.IsPublic and prop.CanRead then
-		        varProps.AddRow prop
+		        varProps.Append prop
 		      end if
 		    next
 		    
@@ -117,7 +117,7 @@ Protected Class EnvironmentVars_MTC
 
 	#tag Method, Flags = &h1
 		Protected Shared Function IsHiddenValue(prop As Introspection.PropertyInfo) As Boolean
-		  var atts() as Introspection.AttributeInfo = prop.GetAttributes
+		  dim atts() as Introspection.AttributeInfo = prop.GetAttributes
 		  for each a as Introspection.AttributeInfo in atts
 		    if a.Name = kAttributeHideValue then
 		      return true
@@ -131,7 +131,7 @@ Protected Class EnvironmentVars_MTC
 
 	#tag Method, Flags = &h0
 		Shared Function ToBoolean(stringValue As String) As Boolean
-		  var trueValues() as string = array( "yes", "y", "true", "t", "1" )
+		  dim trueValues() as string = array( "yes", "y", "true", "t", "1" )
 		  if trueValues.IndexOf( stringValue ) <> -1 then
 		    return true
 		  end if
@@ -156,7 +156,7 @@ Protected Class EnvironmentVars_MTC
 
 	#tag Method, Flags = &h1
 		Protected Shared Function ValueFor(methodName As String) As String
-		  var envVar as string = ExtractVarName( methodName )
+		  dim envVar as string = ExtractVarName( methodName )
 		  return System.EnvironmentVariable( envVar )
 		  
 		End Function
@@ -164,7 +164,7 @@ Protected Class EnvironmentVars_MTC
 
 	#tag Method, Flags = &h1
 		Protected Shared Sub ValueFor(methodName As String, Assigns value As String)
-		  var envVar as string = ExtractVarName( methodName )
+		  dim envVar as string = ExtractVarName( methodName )
 		  System.EnvironmentVariable( envVar ) = value
 		  
 		End Sub
