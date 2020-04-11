@@ -8,6 +8,16 @@ Protected Class EnvironmentVars_MTC
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0, Description = 436C65617273207468652076616C7565206F6620657665727920656E7669726F6E6D656E74207661726961626C65
+		Shared Sub ClearAll()
+		  dim envVars() as string = GetVarNames
+		  for each envVar as string in envVars
+		    System.EnvironmentVariable( envVar ) = ""
+		  next
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Sub Constructor()
 		  //
