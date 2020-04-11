@@ -9,10 +9,16 @@ Protected Class EnvironmentVars_MTC
 	#tag EndMethod
 
 	#tag Method, Flags = &h0, Description = 436C65617273207468652076616C7565206F6620657665727920656E7669726F6E6D656E74207661726961626C65
-		Shared Sub ClearAll()
-		  dim envVars() as string = GetVarNames
-		  for each envVar as string in envVars
-		    System.EnvironmentVariable( envVar ) = ""
+		Shared Sub ClearWriteableVars()
+		  //
+		  // Clear only the writeable variables
+		  //
+		  
+		  dim props() as Introspection.PropertyInfo = GetVarProps
+		  for each prop as Introspection.PropertyInfo in props
+		    if prop.CanWrite then
+		      System.EnvironmentVariable( prop.Name ) = ""
+		    end if
 		  next
 		  
 		End Sub
@@ -25,6 +31,13 @@ Protected Class EnvironmentVars_MTC
 		  //
 		  
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Shared Function Count() As Integer
+		  return VarProps.Ubound + 1
+		  
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
@@ -86,8 +99,6 @@ Protected Class EnvironmentVars_MTC
 		    raise err
 		  end if
 		  
-		  static varProps() as Introspection.PropertyInfo
-		  
 		  static needsInit as boolean = true
 		  if needsInit then
 		    dim ti as Introspection.TypeInfo = MySubclassTypeInfo
@@ -95,14 +106,14 @@ Protected Class EnvironmentVars_MTC
 		    
 		    for each prop as Introspection.PropertyInfo in allProps
 		      if prop.IsComputed and prop.IsShared and prop.IsPublic and prop.CanRead then
-		        varProps.Append prop
+		        VarProps.Append prop
 		      end if
 		    next
 		    
 		    needsInit = false
 		  end if
 		  
-		  return varProps
+		  return VarProps
 		  
 		End Function
 	#tag EndMethod
@@ -131,6 +142,8 @@ Protected Class EnvironmentVars_MTC
 
 	#tag Method, Flags = &h0
 		Shared Function ToBoolean(stringValue As String) As Boolean
+		  stringValue = stringValue.Trim
+		  
 		  dim trueValues() as string = array( "yes", "y", "true", "t", "1" )
 		  if trueValues.IndexOf( stringValue ) <> -1 then
 		    return true
@@ -139,17 +152,31 @@ Protected Class EnvironmentVars_MTC
 		  //
 		  // See if it's a non-zero number
 		  //
-		  static rx as new RegEx
+		  static rx as RegEx
 		  if rx is nil then
 		    rx = new RegEx
 		    rx.SearchPattern = "\A-?0*[1-9]\d*\z"
 		  end if
 		  
-		  if rx.Search( stringValue ) isa RegExMatch then
+		  dim match as RegExMatch = rx.Search( stringValue )
+		  if match isa RegExMatch then
 		    return true
 		  end if
 		  
 		  return false
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0, Description = 436F6E76656E69656E6365206D6574686F6420746F20636F6E7665727420746F20612044696374696F6E617279
+		Shared Function ToDictionary() As Dictionary
+		  dim dict as new Dictionary
+		  dim envVars() as string = GetVarNames
+		  for each envVar as string in envVars
+		    dict.Value( envVar ) = System.EnvironmentVariable( envVar )
+		  next
+		  
+		  return dict
 		  
 		End Function
 	#tag EndMethod
@@ -173,6 +200,10 @@ Protected Class EnvironmentVars_MTC
 
 	#tag Property, Flags = &h21
 		Private Shared MySubclassTypeInfo As Introspection.TypeInfo
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private Shared VarProps() As Introspection.PropertyInfo
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
