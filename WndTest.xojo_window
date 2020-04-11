@@ -1,5 +1,5 @@
 #tag Window
-Begin Window Window1
+Begin Window WndTest
    Backdrop        =   0
    BackgroundColor =   &cFFFFFF00
    Composite       =   False
