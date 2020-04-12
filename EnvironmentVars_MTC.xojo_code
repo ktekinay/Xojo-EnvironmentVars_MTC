@@ -9,7 +9,7 @@ Protected Class EnvironmentVars_MTC
 	#tag EndMethod
 
 	#tag Method, Flags = &h0, Description = 436C65617273207468652076616C7565206F6620657665727920656E7669726F6E6D656E74207661726961626C65
-		Shared Sub ClearWriteableVars()
+		Sub ClearWriteableVars()
 		  //
 		  // Clear only the writeable variables
 		  //
@@ -25,22 +25,6 @@ Protected Class EnvironmentVars_MTC
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub Constructor()
-		  //
-		  // Do not instantiate
-		  //
-		  
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Shared Function Count() As Integer
-		  return VarProps.Ubound + 1
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
 		Protected Shared Function ExtractVarName(methodName As String) As String
 		  return methodName.NthField( ".", 2 )
 		  
@@ -48,7 +32,7 @@ Protected Class EnvironmentVars_MTC
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Shared Function GetDisplayValue(varName As String, useUnsetValue As String = "<NOT SET>", useHiddenValue As String = "<SET>") As String
+		Function GetDisplayValue(varName As String, useUnsetValue As String = "<NOT SET>", useHiddenValue As String = "<SET>") As String
 		  //
 		  // Returns the display value for a property
 		  //
@@ -79,7 +63,7 @@ Protected Class EnvironmentVars_MTC
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Shared Function GetVarNames() As String()
+		Function GetVarNames() As String()
 		  dim names() as string
 		  
 		  for each prop as Introspection.PropertyInfo in GetVarProps
@@ -92,25 +76,24 @@ Protected Class EnvironmentVars_MTC
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Shared Function GetVarProps() As Introspection.PropertyInfo()
-		  if not WasInited then
-		    dim err as new RuntimeException
-		    err.Message = "Init(subclassTypeInfo) was must called first"
-		    raise err
-		  end if
-		  
-		  static needsInit as boolean = true
-		  if needsInit then
-		    dim ti as Introspection.TypeInfo = MySubclassTypeInfo
+		Protected Function GetVarProps() As Introspection.PropertyInfo()
+		  if not WasInitialized then
+		    dim tiSuper as Introspection.TypeInfo = GetTypeInfo( EnvironmentVars_MTC )
+		    dim superPropNames as new Dictionary
+		    for each prop as Introspection.PropertyInfo in tiSuper.GetProperties
+		      superPropNames.Value( prop.Name ) = prop
+		    next
+		    
+		    dim ti as Introspection.TypeInfo = Introspection.GetType( self )
 		    dim allProps() as Introspection.PropertyInfo = ti.GetProperties
 		    
 		    for each prop as Introspection.PropertyInfo in allProps
-		      if prop.IsComputed and prop.IsShared and prop.IsPublic and prop.CanRead then
+		      if prop.IsComputed and prop.IsPublic and prop.CanRead and superPropNames.HasKey( prop.Name ) = false then
 		        VarProps.Append prop
 		      end if
 		    next
 		    
-		    needsInit = false
+		    WasInitialized = true
 		  end if
 		  
 		  return VarProps
@@ -118,16 +101,8 @@ Protected Class EnvironmentVars_MTC
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Shared Sub Init(subclassTypeInfo As Introspection.TypeInfo)
-		  MySubclassTypeInfo = subclassTypeInfo
-		  wasInited = true
-		  
-		End Sub
-	#tag EndMethod
-
 	#tag Method, Flags = &h1
-		Protected Shared Function IsHiddenValue(prop As Introspection.PropertyInfo) As Boolean
+		Protected Function IsHiddenValue(prop As Introspection.PropertyInfo) As Boolean
 		  dim atts() as Introspection.AttributeInfo = prop.GetAttributes
 		  for each a as Introspection.AttributeInfo in atts
 		    if a.Name = kAttributeHideValue then
@@ -169,7 +144,7 @@ Protected Class EnvironmentVars_MTC
 	#tag EndMethod
 
 	#tag Method, Flags = &h0, Description = 436F6E76656E69656E6365206D6574686F6420746F20636F6E7665727420746F20612044696374696F6E617279
-		Shared Function ToDictionary() As Dictionary
+		Function ToDictionary() As Dictionary
 		  dim dict as new Dictionary
 		  dim envVars() as string = GetVarNames
 		  for each envVar as string in envVars
@@ -199,15 +174,11 @@ Protected Class EnvironmentVars_MTC
 
 
 	#tag Property, Flags = &h21
-		Private Shared MySubclassTypeInfo As Introspection.TypeInfo
+		Private VarProps() As Introspection.PropertyInfo
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private Shared VarProps() As Introspection.PropertyInfo
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private Shared WasInited As Boolean
+		Private WasInitialized As Boolean
 	#tag EndProperty
 
 

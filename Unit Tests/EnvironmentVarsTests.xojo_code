@@ -3,7 +3,8 @@ Protected Class EnvironmentVarsTests
 Inherits TestGroup
 	#tag Event
 		Sub Setup()
-		  MyEnvVars.ClearWriteableVars
+		  dim vars as new MyEnvVars
+		  vars.ClearWriteableVars
 		  System.EnvironmentVariable( "READ_ONLY_STRING" ) = "" // Only way to clear it
 		  
 		  
@@ -42,35 +43,31 @@ Inherits TestGroup
 		  
 		  System.EnvironmentVariable( "READ_ONLY_STRING" ) = "read only"
 		  
-		  MyEnvVars.ClearWriteableVars
+		  dim vars as new MyEnvVars
+		  vars.ClearWriteableVars
 		  
 		  Assert.AreEqual "", System.EnvironmentVariable( "READ_WRITE_STRING" )
 		  Assert.AreEqual "", System.EnvironmentVariable( "READ_WRITE_BOOLEAN" )
-		  Assert.AreEqual "read only", MyEnvVars.READ_ONLY_STRING
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub CountTest()
-		  Assert.AreEqual 4, MyEnvVars.Count
-		  
+		  Assert.AreEqual "read only", vars.READ_ONLY_STRING // Not Shared
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub GetDisplayValueTest()
-		  Assert.AreEqual "<NOT SET>", MyEnvVars.GetDisplayValue( "HIDDEN_STRING" )
+		  dim vars as new MyEnvVars
+		  Assert.AreEqual "<NOT SET>", vars.GetDisplayValue( "HIDDEN_STRING" )
 		  
 		  System.EnvironmentVariable( "HIDDEN_STRING" ) = "password"
 		  Assert.AreEqual "password", MyEnvVars.HIDDEN_STRING
-		  Assert.AreEqual "<SET>", MyEnvVars.GetDisplayValue( "HIDDEN_STRING" )
+		  Assert.AreEqual "<SET>", vars.GetDisplayValue( "HIDDEN_STRING" )
 		  
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub GetVarNamesTest()
-		  dim envVars() as string = MyEnvVars.GetVarNames
+		  dim vars as new MyEnvVars
+		  dim envVars() as string = vars.GetVarNames
 		  Assert.AreEqual 3, CType( envVars.Ubound, integer )
 		  Assert.AreNotEqual -1, CType( envVars.IndexOf( "READ_WRITE_STRING" ), integer )
 		  
@@ -112,9 +109,10 @@ Inherits TestGroup
 		Sub ToDictionaryTest()
 		  MyEnvVars.READ_WRITE_STRING = "hi"
 		  
-		  dim dict as Dictionary = MyEnvVars.ToDictionary
+		  dim vars as new MyEnvVars
+		  dim dict as Dictionary = vars.ToDictionary
 		  
-		  Assert.AreEqual MyEnvVars.Count, dict.Count
+		  Assert.AreEqual 4, dict.Count
 		  Assert.AreEqual "hi", dict.Value( "READ_WRITE_STRING" ).StringValue
 		  Assert.AreEqual "", dict.Value( "READ_WRITE_BOOLEAN" ).StringValue
 		  

@@ -24,7 +24,7 @@ Inherits EnvironmentVars_MTC
 			  
 			End Get
 		#tag EndGetter
-		Shared READ_ONLY_STRING As String
+		READ_ONLY_STRING As String
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
