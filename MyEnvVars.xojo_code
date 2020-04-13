@@ -4,6 +4,22 @@ Inherits EnvironmentVars_MTC
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  return BooleanValueFor( CurrentMethodName )
+			  
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  BooleanValueFor( CurrentMethodName ) = value
+			  
+			End Set
+		#tag EndSetter
+		Attributes( HideValue ) HIDDEN_BOOLEAN As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
 			  return ValueFor( CurrentMethodName )
 			  
 			End Get
@@ -108,6 +124,14 @@ Inherits EnvironmentVars_MTC
 			Group="Behavior"
 			InitialValue=""
 			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="HIDDEN_BOOLEAN"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
 			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
