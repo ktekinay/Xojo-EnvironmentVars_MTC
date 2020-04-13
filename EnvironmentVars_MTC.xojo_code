@@ -8,6 +8,14 @@ Protected Class EnvironmentVars_MTC
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Shared Sub BooleanValueFor(methodName As String, valueSet As BooleanValueSets = BooleanValueSets.YesNo, Assigns value As Boolean)
+		  ValueFor( methodName ) = FromBoolean( value, valueSet )
+		  
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0, Description = 436C65617273207468652076616C7565206F6620657665727920656E7669726F6E6D656E74207661726961626C65
 		Sub ClearWriteableVars()
 		  //
@@ -27,6 +35,32 @@ Protected Class EnvironmentVars_MTC
 	#tag Method, Flags = &h1
 		Protected Shared Function ExtractVarName(methodName As String) As String
 		  return methodName.NthField( ".", 2 )
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Shared Function FromBoolean(value As Boolean, valueSet As BooleanValueSets = BooleanValueSets.YesNo) As String
+		  dim stringValue as string
+		  
+		  select case valueSet
+		  case BooleanValueSets.YesNo
+		    stringValue = if( value, "yes", "no" )
+		    
+		  case BooleanValueSets.TrueFalse
+		    stringValue = if( value, "true", "false" )
+		    
+		  case BooleanValueSets.OneZero
+		    stringValue = if( value, "1", "0" )
+		    
+		  case else
+		    dim err as new UnsupportedFormatException
+		    err.Message = "Unknown BooleanValueSets value"
+		    raise err
+		    
+		  end select
+		  
+		  return stringValue
 		  
 		End Function
 	#tag EndMethod
@@ -184,6 +218,13 @@ Protected Class EnvironmentVars_MTC
 
 	#tag Constant, Name = kAttributeHideValue, Type = String, Dynamic = False, Default = \"HideValue", Scope = Protected
 	#tag EndConstant
+
+
+	#tag Enum, Name = BooleanValueSets, Type = Integer, Flags = &h0
+		YesNo
+		  TrueFalse
+		OneZero
+	#tag EndEnum
 
 
 	#tag ViewBehavior

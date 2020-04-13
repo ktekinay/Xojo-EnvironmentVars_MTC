@@ -53,6 +53,23 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub FromBooleanTest()
+		  Assert.AreEqual "yes", EnvironmentVars_MTC.FromBoolean( true )
+		  Assert.AreEqual "no", EnvironmentVars_MTC.FromBoolean( false )
+		  
+		  Assert.AreEqual "yes", EnvironmentVars_MTC.FromBoolean( true, EnvironmentVars_MTC.BooleanValueSets.YesNo )
+		  Assert.AreEqual "no", EnvironmentVars_MTC.FromBoolean( false, EnvironmentVars_MTC.BooleanValueSets.YesNo )
+		  
+		  Assert.AreEqual "true", EnvironmentVars_MTC.FromBoolean( true, EnvironmentVars_MTC.BooleanValueSets.TrueFalse )
+		  Assert.AreEqual "false", EnvironmentVars_MTC.FromBoolean( false, EnvironmentVars_MTC.BooleanValueSets.TrueFalse )
+		  
+		  Assert.AreEqual "1", EnvironmentVars_MTC.FromBoolean( true, EnvironmentVars_MTC.BooleanValueSets.OneZero )
+		  Assert.AreEqual "0", EnvironmentVars_MTC.FromBoolean( false, EnvironmentVars_MTC.BooleanValueSets.OneZero )
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub GetDisplayValueTest()
 		  dim vars as new MyEnvVars
 		  Assert.AreEqual "<NOT SET>", vars.GetDisplayValue( "HIDDEN_STRING" )

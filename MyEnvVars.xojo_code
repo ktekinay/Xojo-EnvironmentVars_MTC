@@ -36,7 +36,8 @@ Inherits EnvironmentVars_MTC
 		#tag EndGetter
 		#tag Setter
 			Set
-			  ValueFor( CurrentMethodName ) = if( value, "yes", "no" )
+			  BooleanValueFor( CurrentMethodName ) = value
+			  
 			  
 			End Set
 		#tag EndSetter
@@ -99,6 +100,14 @@ Inherits EnvironmentVars_MTC
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="READ_ONLY_STRING"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
 			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
