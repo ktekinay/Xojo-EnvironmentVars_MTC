@@ -219,6 +219,9 @@ Protected Class EnvironmentVars_MTC
 	#tag Constant, Name = kAttributeHideValue, Type = String, Dynamic = False, Default = \"HideValue", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = kVersion, Type = String, Dynamic = False, Default = \"1.0", Scope = Public
+	#tag EndConstant
+
 
 	#tag Enum, Name = BooleanValueSets, Type = Integer, Flags = &h0
 		YesNo
