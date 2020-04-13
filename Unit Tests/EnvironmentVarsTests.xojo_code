@@ -48,7 +48,7 @@ Inherits TestGroup
 		  
 		  Assert.AreEqual "", System.EnvironmentVariable( "READ_WRITE_STRING" )
 		  Assert.AreEqual "", System.EnvironmentVariable( "READ_WRITE_BOOLEAN" )
-		  Assert.AreEqual "read only", vars.READ_ONLY_STRING // Not Shared
+		  Assert.AreEqual "read only", vars.READ_ONLY_STRING 
 		End Sub
 	#tag EndMethod
 
@@ -92,7 +92,9 @@ Inherits TestGroup
 		  Assert.IsFalse EnvironmentVars_MTC.ToBoolean( "" ), "<empty>"
 		  Assert.IsFalse EnvironmentVars_MTC.ToBoolean( "   " ), "<spaces>"
 		  Assert.IsFalse EnvironmentVars_MTC.ToBoolean( "0" ), "0"
+		  Assert.IsFalse EnvironmentVars_MTC.ToBoolean( "00" ), "00"
 		  Assert.IsFalse EnvironmentVars_MTC.ToBoolean( "-0" ), "-0"
+		  Assert.IsFalse EnvironmentVars_MTC.ToBoolean( "-00" ), "-00"
 		  Assert.IsFalse EnvironmentVars_MTC.ToBoolean( "n" ), "n"
 		  Assert.IsFalse EnvironmentVars_MTC.ToBoolean( "no" ), "no"
 		  Assert.IsFalse EnvironmentVars_MTC.ToBoolean( "f" ), "f"
