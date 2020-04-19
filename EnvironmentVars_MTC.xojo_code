@@ -168,12 +168,7 @@ Protected Class EnvironmentVars_MTC
 		  end if
 		  
 		  dim match as RegExMatch = rx.Search( stringValue )
-		  if match isa RegExMatch then
-		    return true
-		  end if
-		  
-		  return false
-		  
+		  return match isa RegExMatch
 		End Function
 	#tag EndMethod
 
