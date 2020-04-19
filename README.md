@@ -8,7 +8,7 @@ Using environment variables in Xojo usually means creating constants with the va
 
 ## Setting Up
 
-Open the Harness project included here and copy the `EnvironmentVars_MTC` class to your project, then create a subclass. (For illustration, we'll call the subclass `MyEnvVars`.)
+Open the included Harness project and copy the `EnvironmentVars_MTC` class to your project, then create a subclass. (For illustration, we'll call the subclass `MyEnvVars`.)
 
 Add a Computed property to `MyEnvVars`, either Regular or Shared (more on this later), using the name of your environment variable exactly, then set the Get and Set methods like this:
 
