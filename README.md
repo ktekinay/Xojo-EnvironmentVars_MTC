@@ -72,6 +72,10 @@ The advantages of using this scheme are:
 
 * `GetVarNames() As String()` will return a string array of the existing variable names. Use in conjunction with `GetDisplayValue`.
 
+* `FromBoolean(value As Boolean[, valueSet As BooleanValueSets]) As String` is a **Shared** function that will convert a Boolean value to String using the given enum value as a guide. (YesNo is default, or TrueFalse or OneZero.) Use this directly if you want greater control of how Booelan values are stored.
+
+* `ToBoolean(stringValue As String) As Boolean` is a **Shared** function that will interpret a string as a Boolean value. A string that is "y", "yes", "t", or "true", regardless of case, or any non-zero number will be intereted as True.
+
 * `ToDictionary() As Dictionary` will return a Dictionary with the environment variable as the key linked to its value.
 
 ## Listing Variables
