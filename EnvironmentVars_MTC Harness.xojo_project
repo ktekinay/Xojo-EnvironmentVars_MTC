@@ -61,7 +61,6 @@ DebuggerCommandLine=
 UseGDIPlus=False
 UseBuildsFolder=True
 HiDPI=True
-DarkMode=True
 CopyRedistNextToWindowsEXE=False
 IsWebProject=False
 LinuxBuildArchitecture=1
