@@ -127,6 +127,6 @@ This project was created by and is maintained by Kem Tekinay (ktekinay@mactechno
 
 # Release Notes
 
-**1.0** (Apr. ___, 2020)
+**1.0** (Apr. 19, 2020)
 
 - Initial release.
